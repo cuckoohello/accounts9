@@ -10,9 +10,7 @@ module.exports =
       appKey: '594712322'
       appSecret: 'feaf266d9140c67d0fc5424c4cb03e8e'
   db:
-    host: "localhost"
-    port: 27017
-    name: "accounts9"
+    url: 'mongodb://localhost/accounts9'
   log:
     access: "access.log"
     error: "error.log"

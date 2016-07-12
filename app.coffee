@@ -50,9 +50,7 @@ app.use flash()
 app.use session(
   secret: config.cookieSecret
   store: new MongoStore(
-    db: config.db.name
-    host: config.db.host
-    port: config.db.port
+    url: config.db.url
   )
   resave: false
   saveUninitialized: false
