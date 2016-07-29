@@ -28,15 +28,6 @@ UserSchema = new mongoose.Schema(
   birthdate: String
   groups: [ String ]
   regtime: Date
-  bachelor:
-    year: Number
-    classNumber: Number
-  master:
-    year: Number
-    classNumber: Number
-  doctor:
-    year: Number
-    classNumber: Number
   identity: [ Buffer ]
 )
 
@@ -147,18 +138,9 @@ User.getByNames = (usernames, callback) ->
         callback null, users
 
 User.validate = (user, cb) ->
-  yearRegex = /^\d{4}$/
-  classNumberRegex = /^\d{1,2}$/
   unless user.name and user.surname and user.givenname and user.email
     return cb("fields-required")
   thuStudent = false
-  for i in ['bachelor', 'master', 'doctor']
-    if yearRegex.test user[i]?.year
-      unless classNumberRegex.test user[i]?.classNumber
-        return cb("#{i}-info-required")
-      thuStudent = true
-  unless thuStudent
-    return cb("thu-student-required")
   cb null
 
 User.fillFrom = (user, o) ->
@@ -176,9 +158,6 @@ User.fillFrom = (user, o) ->
   user.bio = o.bio
   user.birthdate = o.birthdate
   user.fullname = o.surname + o.givenname
-  user.bachelor = year: o.bachelorYear, classNumber: o.bachelorClassNumber
-  user.master = year: o.masterYear, classNumber: o.masterClassNumber
-  user.doctor = year: o.doctorYear, classNumber: o.doctorClassNumber
   if o.password
     user.password = o.password
   if o['password-repeat']

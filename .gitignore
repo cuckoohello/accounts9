@@ -8,3 +8,4 @@ node_modules
 .settings
 .project
 .DS_Store
+.idea
