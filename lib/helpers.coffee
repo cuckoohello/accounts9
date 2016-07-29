@@ -5,21 +5,16 @@ User = require('../user/model')
 Group = require('../group/model')
 emailTemplates = require('email-templates')
 nodemailer     = require('nodemailer')
-directTransport = require('nodemailer-direct-transport')
 Config = require(__dirname + '/../config')
 
 templatesDir = __dirname + '/../email-tpl'
 
 exports.sendMail = (tpl, params, to, subject, callback) ->
   hs = url.parse(Config.host).hostname
-  from = "Accounts9 <no-reply@#{hs}>"
+  from = Config.smtp.auth.user
   emailTemplates templatesDir, (err, template) ->
     return callback(err) if err
-    transport = nodemailer.createTransport directTransport {name: hs}
-      # service: "Gmail"
-      # auth: 
-      #   user: "some-user@gmail.com",
-      #   pass: "some-password"
+    transport = nodemailer.createTransport Config.smtp
 
     template tpl, params, (err, html, text) ->
       return callback(err) if err

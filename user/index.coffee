@@ -81,7 +81,7 @@ exports.fetchPassword = (req, res) ->
     Validation.newValidationCode user.uid, 'fetchpwd', obtain(code)
     p = {user_name: user.fullname, reset_link: config.host+'/login/resetpwd/'+code}
     console.log(p)
-    helpers.sendMail 'fetchpwd', p, email, messages.get('fetch-password'), (err, status) ->
+    helpers.sendMail 'fetchpwd', p, email, messages.get('fetch-password')[0], (err, status) ->
       if err
         console.log err
       else 
