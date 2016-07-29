@@ -256,27 +256,3 @@ exports.search = (req, res, next) ->
   catch err
     next err
 
-exports.connectRenren = (req, res, next) ->
-  res.redirect ThirdPartyUser.getRenrenAuthrizeUrl()
-
-exports.connectRenrenToken = (req, res, next) ->
-  try
-    helpers.checkLogin req, res, obtain()
-    if req.query.error
-      throw req.query.error
-    code = req.query.code
-    ThirdPartyUser.updateRenren req.session.user, code, obtain()
-    req.flash 'info', '连接成功'
-    res.redirect '/dashboard'
-  catch err
-    helpers.errorRedirect(req, res, err, '/dashboard')
-
-exports.connectWeibo = (req, res, next) ->
-  try
-    ThirdPartyUser.getWeiboAuthorizeUrl obtain(redirectUrl)
-    res.redirect redirectUrl
-  catch err
-    helpers.errorRedirect(req, res, err, '/dashboard')
-
-exports.connectWeiboToken = (req, res, next) ->
-  next 'not-implemented'

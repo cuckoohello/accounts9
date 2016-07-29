@@ -126,8 +126,6 @@ exports.messages =
   "revoke-authorization": "撤销授权"
   "revoke-authorization-confirm": "你确定要撤销<a href=\"/apps/$1\" target=\"_blank\"><strong>$2</strong></a>的访问权限吗？撤销后<strong>$2</strong>将不能再访问你的个人信息。"
   "third-party-connection": "第三方连接"
-  "renren": "人人网"
-  "connect-to-renren": "连接到人人网"
   "save-as-vcard": "另存为vCard通讯录"
   "cannot-change-realname": "已认证用户禁止修改真实姓名, 如确有需要请与管理员(net9master@gmail.com)联系"
   "fetch-password-tips": "请填入电子邮件地址以获取密码重置链接"

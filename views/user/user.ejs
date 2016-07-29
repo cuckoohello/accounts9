@@ -24,15 +24,4 @@
 					<%= msg('edit-userinfo') %>
 			</a>
     <% } %>
-
-    <% if (thirdpartyUser) { %>
-      <hr>
-      <% if (thirdpartyUser.renren) { %>
-        <p>
-          <a href="http://www.renren.com/<%= thirdpartyUser.renren.uid %>" target="_blank" style="border:none">
-            <img src="/img/renren.png" title="<%= msg('renren') %>">
-          </a>
-        </p>
-      <% } %>
-    <% } %>
 </div>
