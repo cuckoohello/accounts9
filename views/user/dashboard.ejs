@@ -77,15 +77,3 @@
   </li>
 </ul>
 <hr>
-
-<% if (!bbsUser) { %>
-<a href="/bbs/connect" class="btn" style="float:right;position:relative;top:10px">
-  <i class="icon-plus icon-white"></i>
-  <%= msg('net9-bbs-connect') %>
-</a>
-<% } %>
-<h2><%= msg('net9-bbs') %></h2>
-<% if (bbsUser) { %>
-  <% include bbsuser %>
-<% } %>
-<hr>

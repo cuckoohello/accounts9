@@ -3,7 +3,6 @@ appman = require("../app/man")
 oauthman = require("./man")
 messages = require("../messages")
 User = require("../user/model")
-BBSUser = require("../bbs/model")
 Group = require("../group/model")
 Metainfo = require("../lib/metainfo")
 helpers = require("../lib/helpers")
@@ -176,12 +175,6 @@ module.exports = (app) ->
       res.jsonOrP
         err: err
         group: group
-
-  app.get "/api/bbsuserinfo", (req, res) ->
-    BBSUser.getAndUpdate req.tokeninfo.uid, (err, bbsUser) ->
-      res.jsonOrP
-        err: err
-        user: bbsUser
 
   #Methods below need additional authrorizations
   app.get "/api/*", (req, res, next) ->

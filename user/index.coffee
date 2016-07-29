@@ -2,7 +2,6 @@
 url = require('url')
 User = require('./model')
 Validation = require('./validation')
-BBSUser = require('../bbs/model')
 ThirdPartyUser = require('./thirdparty')
 Group = require('../group/model')
 appman = require('../app/man')
@@ -18,14 +17,12 @@ exports.userPage = (req, res, next) ->
     User.getByName req.params.username, obtain(user)
     user.getDirectGroups obtain()
     user.getAdminGroups obtain()
-    BBSUser.getBBSUser user.uid, obtain(bbsUser)
     ThirdPartyUser.get user.uid, obtain(thirdpartyUser)
     helpers.checkRootAdmin req, res, obtain(isRoot), false
     res.render 'user/user',
       locals:
         title: user.title
         user: user
-        bbsUser: bbsUser
         thirdpartyUser: thirdpartyUser
         isRoot: isRoot
   catch err
@@ -37,7 +34,6 @@ exports.dashboradPage = (req, res, next) ->
     User.getByName req.session.user.name, obtain(user)
     user.getDirectGroups obtain()
     user.getAdminGroups obtain()
-    BBSUser.getAndUpdate req.session.user.uid, obtain(bbsUser)
     appman.getAllByUser user.name, cont(apps)
     ThirdPartyUser.get req.session.user.uid, obtain(thirdpartyUser)
     helpers.checkRootAdmin req, res, obtain(isRoot), false
@@ -45,7 +41,6 @@ exports.dashboradPage = (req, res, next) ->
       locals:
         title: messages.get('dashboard')
         user: user
-        bbsUser: bbsUser
         thirdpartyUser: thirdpartyUser
         apps: apps
         isRoot: isRoot

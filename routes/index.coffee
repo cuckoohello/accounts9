@@ -1,7 +1,6 @@
 messages = require('../messages')
 user = require('../user')
 group = require('../group')
-bbs = require('../bbs')
 card9 = require('../card9')
 
 indexPage = (req, res) ->
@@ -109,12 +108,6 @@ routes = [
     path: '/group/:groupname/deladmin/:username'
     GET: group.delAdminPage
     POST: group.delAdmin
-  }, {
-    path: '/bbs/connect'
-    GET: bbs.connect
-  }, {
-    path: '/bbs/token'
-    GET: bbs.token
   }, {
     path: '/card9'
     use: card9.permissionCheck
