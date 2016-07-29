@@ -138,7 +138,7 @@ app.use (req, res, next) ->
       notFound: true
 
 unless module.parent
-  server = app.listen 3000, "127.0.0.1", ->
+  server = app.listen 3000, "0.0.0.0", ->
     console.log "Express server listening on port %d", server.address().port
 
     ldapIfce.listen 1389, '0.0.0.0', ->
