@@ -28,6 +28,7 @@ UserSchema = new mongoose.Schema(
   birthdate: String
   groups: [ String ]
   regtime: Date
+  department: String
   identity: [ Buffer ]
 )
 
@@ -52,6 +53,7 @@ UserSchema.pre 'save', (next) ->
   @birthdate ?= ''
   @regtime ?= new Date()
   @groups ?= []
+  @department ?= ''
   @identity ?= []
 
   next()
@@ -138,9 +140,8 @@ User.getByNames = (usernames, callback) ->
         callback null, users
 
 User.validate = (user, cb) ->
-  unless user.name and user.surname and user.givenname and user.email
+  unless user.name and user.surname and user.givenname and user.email and user.department
     return cb("fields-required")
-  thuStudent = false
   cb null
 
 User.fillFrom = (user, o) ->
@@ -158,6 +159,7 @@ User.fillFrom = (user, o) ->
   user.bio = o.bio
   user.birthdate = o.birthdate
   user.fullname = o.surname + o.givenname
+  user.department = o.department
   if o.password
     user.password = o.password
   if o['password-repeat']

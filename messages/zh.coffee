@@ -18,6 +18,8 @@ exports.messages =
   "given-name": "名"
   "sur-name": "姓"
   "full-name": "姓名"
+  "department": "部门"
+  "editinfo-department-tips": "部门信息,例如研发部"
   "email": "电子邮件"
   "emails": "备用邮箱"
   "mobile": "移动电话"

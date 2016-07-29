@@ -29,6 +29,13 @@
       </div>
     </div>
     <div class="field">
+      <label for="department"><%- msg('department') %></label>
+      <div class="controls">
+        <input type="text" class="text" id="department" name="department" value="<%= user.department %>" required>
+        <p class="help-block"><%- msg('editinfo-department-tips') %></p>
+      </div>
+    </div>
+    <div class="field">
       <label for="email"><%- msg('email') %></label>
       <div class="controls">
         <input type="text" class="text" id="email" name="email" value="<%= user.email %>" required>

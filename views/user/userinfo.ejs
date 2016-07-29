@@ -15,6 +15,12 @@
       <td><%= user.fullname %></td>
     </tr>
   <% } %>
+  <% if (user.department) { %>
+    <tr>
+      <th><%= msg('department') %></th>
+      <td><%= user.department %></td>
+    </tr>
+  <% } %>
   <% if (user.email) { %>
     <tr>
       <th><%= msg('Email') %></th>
