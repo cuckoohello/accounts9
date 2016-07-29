@@ -2,6 +2,7 @@ module.exports =
   cookieSecret: "accounts9"
   interfaceSecret: "Example"
   host: "https://accounts.net9.org"
+  suffix: 'dc=net9, dc=org'
   smtp:
     host: 'smtp.263.net'
     secure: false

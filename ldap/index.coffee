@@ -6,7 +6,7 @@ config = require '../config'
 
 server = module.exports = ldap.createServer()
 
-SUFFIX = 'dc=net9, dc=org'
+SUFFIX = config.suffix
 USERS_DN = 'dc=users, '+SUFFIX
 GROUPS_DN = 'dc=groups, '+SUFFIX
 AUTH_DN = 'cn=auth, '+SUFFIX
