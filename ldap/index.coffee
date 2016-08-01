@@ -137,6 +137,22 @@ dn2username = (dn)->
 
 filter2mongoquery = (filter)->
   result = {}
+  switch filter.attribute
+    when 'cn'
+      filter.attribute = 'name'
+    when 'mail'
+      filter.attribute = 'email'
+    when 'displayName'
+      filter.attribute = 'fullname'
+    when 'givenName'
+      filter.attribute = 'givenname'
+    when 'sn'
+      filter.attribute = 'surname'
+    when 'ou'
+      filter.attribute = 'department'
+    when 'mobile'
+      filter.attribute = 'mobile'
+
   switch filter.type
     when 'or','and'
       a = for k,v of filter.filters
@@ -148,6 +164,8 @@ filter2mongoquery = (filter)->
       if filter.attribute != 'objectclass'
         if filter.attribute == 'member'
           result['users'] = dn2username(filter.value)
+        else if filter.attribute == 'memberof'
+          result['groups'] = dn2username(filter.value)
         else
           result[filter.attribute] = filter.value
     when 'present'
