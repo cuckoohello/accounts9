@@ -52,7 +52,7 @@ server.bind USERS_DN, (req, res, next)->
 
 server.search USERS_DN, authorize, (req, res, next)->
   if not req.connection.ldap.bindDN.equals(AUTH_DN)
-    next(new ldap.InsufficientAccessRightsError())
+    return next(new ldap.InsufficientAccessRightsError())
 
   handle_err = (err) ->
     ldap_debug err
@@ -92,7 +92,7 @@ server.search USERS_DN, authorize, (req, res, next)->
 
 server.search GROUPS_DN, authorize, (req, res, next)->
   if not req.connection.ldap.bindDN.equals(AUTH_DN)
-    next(new ldap.InsufficientAccessRightsError())
+    return next(new ldap.InsufficientAccessRightsError())
 
   handle_err = (err) ->
     ldap_debug err
