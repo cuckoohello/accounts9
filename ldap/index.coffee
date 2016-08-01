@@ -167,8 +167,12 @@ buildUserRecord = (user)->
       cn: user.name
       uid: user.uid
       name: user.name
-      email: user.email
-      fullname: user.fullname
+      mail: user.email
+      displayName: user.fullname
+      givenName: user.givenname
+      sn: user.surname
+      ou: user.department
+      mobile: user.mobile
 
 buildGroupRecord = (group)->
   members = []
