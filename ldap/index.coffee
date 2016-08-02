@@ -7,8 +7,8 @@ config = require '../config'
 server = module.exports = ldap.createServer()
 
 SUFFIX = config.suffix
-USERS_DN = 'dc=users, '+SUFFIX
-GROUPS_DN = 'dc=groups, '+SUFFIX
+USERS_DN = 'ou=users, '+SUFFIX
+GROUPS_DN = 'ou=groups, '+SUFFIX
 AUTH_DN = 'cn=auth, '+SUFFIX
 
 # ldap_debug = console.log 
@@ -30,10 +30,10 @@ server.bind AUTH_DN, (req, res, next)->
 
 server.bind USERS_DN, (req, res, next)->
   uname = req.dn.rdns[0]
-  if not uname or not uname['cn']
+  if not uname or not uname['uid']
     return next(new ldap.InvalidCredentialsError());
 
-  uname = uname['cn']
+  uname = uname['uid']
   ldap_debug '======bind user======'
   ldap_debug("user: "+uname)
   User.getByName uname, (err,user)->
@@ -62,7 +62,7 @@ server.search USERS_DN, authorize, (req, res, next)->
   ldap_debug req.dn
   ldap_debug req.filter.json
   if req.dn.equals(USERS_DN)
-    query = filter2mongoquery(req.filter)
+    query = filter2mongoquery(req.filter, 'user')
     # ldap_debug req.scope
     ldap_debug (JSON.stringify (query))
     
@@ -77,8 +77,8 @@ server.search USERS_DN, authorize, (req, res, next)->
       next()
   else
     uname = req.dn.rdns[0]
-    if uname and uname['cn']
-      uname = uname['cn']
+    if uname and uname['uid']
+      uname = uname['uid']
       ldap_debug("User Name: "+uname)
       User.find {'name': uname}, (err,users)->
         for user in users
@@ -102,7 +102,7 @@ server.search GROUPS_DN, authorize, (req, res, next)->
   ldap_debug req.dn
   ldap_debug req.filter.json
   if req.dn.equals(GROUPS_DN)
-    query = filter2mongoquery(req.filter)
+    query = filter2mongoquery(req.filter, 'group')
     ldap_debug (JSON.stringify (query))
     
     Group.find query, (err, groups) ->
@@ -130,15 +130,23 @@ server.search GROUPS_DN, authorize, (req, res, next)->
       next(new ldap.UnavailableError())
 
 username2dn = (name)->
-  'cn='+name+', '+USERS_DN
+  'uid='+name+', '+USERS_DN
 
 dn2username = (dn)->
+  ldap.parseDN(dn).rdns[0]['uid']
+
+dn2groupname = (dn)->
   ldap.parseDN(dn).rdns[0]['cn']
 
-filter2mongoquery = (filter)->
+filter2mongoquery = (filter, type)->
   result = {}
   switch filter.attribute
     when 'cn'
+      if type === 'user'
+        filter.attribute = 'fullname'
+      else
+        filter.attribute = 'name'
+    when 'uid'
       filter.attribute = 'name'
     when 'mail'
       filter.attribute = 'email'
@@ -152,20 +160,22 @@ filter2mongoquery = (filter)->
       filter.attribute = 'department'
     when 'mobile'
       filter.attribute = 'mobile'
+    when 'description'
+      filter.attribute = 'desc'
 
   switch filter.type
     when 'or','and'
       a = for k,v of filter.filters
-        filter2mongoquery(v)
+        filter2mongoquery(v, type)
       result['$'+filter.type] = a
     when 'not'
-      result['$not'] = filter2mongoquery(filter.filter)
+      result['$not'] = filter2mongoquery(filter.filter, type)
     when 'equal'
       if filter.attribute != 'objectclass'
         if filter.attribute == 'member'
           result['users'] = dn2username(filter.value)
         else if filter.attribute == 'memberof'
-          result['groups'] = dn2username(filter.value)
+          result['groups'] = dn2groupname(filter.value)
         else
           result[filter.attribute] = filter.value
     when 'present'
@@ -182,9 +192,8 @@ buildUserRecord = (user)->
     dn: username2dn(user.name)
     attributes:
       objectclass: 'inetOrgPerson'
-      cn: user.name
-      uid: user.uid
-      name: user.name
+      cn: user.fullname
+      uid: user.name
       mail: user.email
       displayName: user.fullname
       givenName: user.givenname
@@ -199,10 +208,8 @@ buildGroupRecord = (group)->
   record = 
     dn: 'cn='+group.name+', '+GROUPS_DN
     attributes:
-      objectclass: 'group'
+      objectclass: 'groupOfNames'
       cn: group.name
-      name: group.name
+      description: group.desc
       title: group.title
       member: members
-
-
