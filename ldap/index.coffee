@@ -142,7 +142,7 @@ filter2mongoquery = (filter, type)->
   result = {}
   switch filter.attribute
     when 'cn'
-      if type === 'user'
+      if type == 'user'
         filter.attribute = 'fullname'
       else
         filter.attribute = 'name'
@@ -150,10 +150,8 @@ filter2mongoquery = (filter, type)->
       filter.attribute = 'name'
     when 'mail'
       filter.attribute = 'email'
-    when 'displayName'
+    when 'displayname'
       filter.attribute = 'fullname'
-    when 'givenName'
-      filter.attribute = 'givenname'
     when 'sn'
       filter.attribute = 'surname'
     when 'ou'
