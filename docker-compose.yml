@@ -1,7 +1,14 @@
-accounts:
-  build: .
-  restart: always
-  container_name: accounts
-  ports:
-    - 1389:1389
-    - 172.17.0.1:3000:3000
+version: '2'
+services:
+  accounts:
+    build: .
+    restart: always
+    container_name: accounts
+    ports:
+      - 1389:1389
+    external_links:
+      - mongodb
+networks:
+  default:
+    external:
+      name: service
