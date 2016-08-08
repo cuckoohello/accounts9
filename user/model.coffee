@@ -212,7 +212,13 @@ User::__defineGetter__ "title", ->
     @name
 
 User::checkPassword = (password) ->
-  (@password is utils.genPassword password) or (@password is '')
+  if (@password is utils.genPassword password) or (@password is '')
+    if typeof @ntPassword is 'undefined'
+      @ntPassword = utils.genNtPassword password
+      @save null
+    true
+  else
+    false
 
 User::addToGroup = (groupName, callback) ->
   @groups = @groups or []
