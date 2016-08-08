@@ -1,6 +1,7 @@
 url = require('url')
 assert = require('assert')
 crypto = require('crypto')
+nthash = require('smbhash').nthash
 
 exports.subset = (src, attrs) ->
   newObj = {}
@@ -74,6 +75,9 @@ exports.contains = (array, value) ->
   for i of array
     return true  if array[i] is value
   false
+
+exports.genNtPassword = (rawpass) ->
+  nthash rawpass
 
 exports.genPassword = (rawpass) ->
   rawpass = "" if not rawpass?

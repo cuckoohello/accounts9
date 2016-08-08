@@ -12,6 +12,7 @@ UserSchema = new mongoose.Schema(
     unique: true
   uid: Number
   password: String
+  ntPassword: String
   nickname: String
   surname: String
   givenname: String
@@ -63,6 +64,7 @@ User.sync = (callback) ->
     users.forEach (user) ->
       User.getByName user.name, (err, user) ->
         user.password = ''
+        user.ntPassword = ''
         user.save null
     callback null
 
@@ -189,6 +191,7 @@ User.create = (user, callback) ->
       return callback("invalid-email")
 
     # Generate password hash
+    user.ntPassword = utils.genNtPassword user.password
     user.password = utils.genPassword user.password
 
     User.checkName user.name, obtain()

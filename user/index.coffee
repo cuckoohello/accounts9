@@ -115,6 +115,7 @@ exports.resetPasswordPage = (req, res) ->
         return callback('password-mismatch')
       User.getByUid uid, (err, user) ->
         return callback(err) if err
+        user.ntPassword = utils.genNtPassword req.body.password
         user.password = utils.genPassword req.body.password
         user.save()
         Validation.removeValidationCode(req.params.code)
@@ -201,6 +202,7 @@ exports.editInfo = (req, res, next) ->
       if (not editByAdmin) and (req.body.newpass isnt req.body.newpassrepeat)
         throw 'password-mismatch'
       if editByAdmin or user.checkPassword(req.body.oldpass)
+        user.ntPassword = utils.genNtPassword req.body.newpass
         user.password = utils.genPassword req.body.newpass
       else
         throw 'wrong-old-password'

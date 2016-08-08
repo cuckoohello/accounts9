@@ -1,4 +1,4 @@
- {
+{
   "name": "accounts9",
   "version": "0.0.6",
   "private": true,
@@ -30,6 +30,7 @@
     "nodemailer": "2.5.0",
     "nodemailer-direct-transport": "3.2.0",
     "oauth": "0.9.14",
-    "serve-favicon": "~2.3.0"
+    "serve-favicon": "~2.3.0",
+    "smbhash": "0.0.1"
   }
 }

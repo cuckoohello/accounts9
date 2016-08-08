@@ -65,12 +65,19 @@ server.search USERS_DN, authorize, (req, res, next)->
     query = filter2mongoquery(req.filter, 'user')
     # ldap_debug req.scope
     ldap_debug (JSON.stringify (query))
+    queryNtPassword = false
+    if query and query["$and"] and query["$and"][0] and query["$and"][0]["authtype"]
+      type = query["$and"].shift()
+      if type["authtype"] == "radius"
+        queryNtPassword = true
     
     User.find query, (err, users) ->
       return handle_err(err) if err
       # ldap_debug(users)
       for user in users
         record = buildUserRecord(user)
+        if queryNtPassword
+          record["attributes"]["ntPassword"] = user.ntPassword
         ldap_debug record
         res.send(record)
       res.end()
