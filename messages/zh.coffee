@@ -46,7 +46,7 @@ exports.messages =
   "wrong-old-password": "旧密码错误"
   "year": "级"
   "class-number": "班"
-  "reg-username-tips": "你的用户名，将会用于登录和个人页面地址，注册后不可更改。要求长度不少于4个字符，不大于12个字符，只能由字母、数字、下划线组成，不区分大小写。"
+  "reg-username-tips": "姓名全拼，否则不予批准，将会用于登录和个人页面地址，注册后不可更改。"
   "reg-password-tips": "以加盐的SHA1散列存储在LDAP服务器中。"
   "reg-email-tips": "你的电子邮箱，将会作为你身份识别的重要依据。"
   "register-success": "用户创建成功，请继续填写个人信息以通过身份认证。"
