@@ -183,7 +183,7 @@ User.create = (user, callback) ->
     user.email = user.email.toLowerCase()
 
     # Validate username and email format
-    usernameRegex = /^[a-z][a-z0-9_]{3,11}$/
+    usernameRegex = /^[a-z][a-z0-9_]{3,20}$/
     if not usernameRegex.exec(user.name)
       return callback("invalid-username")
     emailRegex = /^([a-z0-9_\.\-])+\@(([a-z0-9\-])+\.)+([a-z0-9]{2,4})+$/
