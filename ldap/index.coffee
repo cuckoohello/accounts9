@@ -2,7 +2,7 @@ ldap = require 'ldapjs'
 
 User = require('../user/model')
 Group = require('../group/model').model
-config = require '../config' 
+config = require '../config'
 
 server = module.exports = ldap.createServer()
 
@@ -11,12 +11,13 @@ USERS_DN = 'ou=users, '+SUFFIX
 GROUPS_DN = 'ou=groups, '+SUFFIX
 AUTH_DN = 'cn=auth, '+SUFFIX
 
-# ldap_debug = console.log 
+# ldap_debug = console.log
 ldap_debug = () ->
   ;
 
 authorize = (req, res, next)->
   if (!req.connection.ldap.bindDN.equals(AUTH_DN))
+    res.end()
     return next(new ldap.InsufficientAccessRightsError());
 
   return next();
@@ -70,7 +71,7 @@ server.search USERS_DN, authorize, (req, res, next)->
       type = query["$and"].shift()
       if type["authtype"] == "radius"
         queryNtPassword = true
-    
+
     User.find query, (err, users) ->
       return handle_err(err) if err
       # ldap_debug(users)
@@ -111,7 +112,7 @@ server.search GROUPS_DN, authorize, (req, res, next)->
   if req.dn.equals(GROUPS_DN)
     query = filter2mongoquery(req.filter, 'group')
     ldap_debug (JSON.stringify (query))
-    
+
     Group.find query, (err, groups) ->
       return handle_err(err) if err
       # ldap_debug(groups)
@@ -193,7 +194,7 @@ filter2mongoquery = (filter, type)->
   return result
 
 buildUserRecord = (user)->
-  record = 
+  record =
     dn: username2dn(user.name)
     attributes:
       objectclass: 'inetOrgPerson'
@@ -210,7 +211,7 @@ buildGroupRecord = (group)->
   members = []
   for u in group.users
     members.push username2dn(u)
-  record = 
+  record =
     dn: 'cn='+group.name+', '+GROUPS_DN
     attributes:
       objectclass: 'groupOfNames'
