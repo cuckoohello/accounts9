@@ -51,10 +51,7 @@ server.bind USERS_DN, (req, res, next)->
       ldap_debug 'failed: wrong password'
       return next(new ldap.InvalidCredentialsError())
 
-server.search USERS_DN, authorize, (req, res, next)->
-  if not req.connection.ldap.bindDN.equals(AUTH_DN)
-    return next(new ldap.InsufficientAccessRightsError())
-
+server.search USERS_DN, (req, res, next)->
   handle_err = (err) ->
     ldap_debug err
     next(new ldap.UnavailableError())
@@ -63,6 +60,8 @@ server.search USERS_DN, authorize, (req, res, next)->
   ldap_debug req.dn
   ldap_debug req.filter.json
   if req.dn.equals(USERS_DN)
+    if not req.connection.ldap.bindDN.equals(AUTH_DN)
+      return next(new ldap.InsufficientAccessRightsError())
     query = filter2mongoquery(req.filter, 'user')
     # ldap_debug req.scope
     ldap_debug (JSON.stringify (query))
@@ -85,6 +84,11 @@ server.search USERS_DN, authorize, (req, res, next)->
       next()
   else
     uname = req.dn.rdns[0]
+    if not req.connection.ldap.bindDN.equals(AUTH_DN)
+      bindName = req.connection.ldap.bindDN.rdns[0]
+      if not (uname and uname['uid'] and bindName and bindName['uid'] and uname['uid'] == bindName['uid'])
+        return next(new ldap.InsufficientAccessRightsError())
+
     if uname and uname['uid']
       uname = uname['uid']
       ldap_debug("User Name: "+uname)

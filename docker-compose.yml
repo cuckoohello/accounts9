@@ -6,6 +6,8 @@ services:
     container_name: accounts
     ports:
       - 1389:1389
+    volumes:
+      - ./config.coffee:/usr/src/app/config.coffee
     external_links:
       - mongodb
 networks:
