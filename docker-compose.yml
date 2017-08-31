@@ -1,7 +1,7 @@
 version: '2'
 services:
   accounts:
-    build: .
+    image: cuckoohello/accounts9
     restart: always
     container_name: accounts
     ports:
